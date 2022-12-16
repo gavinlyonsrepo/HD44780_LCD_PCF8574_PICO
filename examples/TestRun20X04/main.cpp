@@ -23,7 +23,7 @@
 #define DISPLAY_DELAY 5000
 
 // *** Globals ***
-HD44780LCD myLCD(LCD_I2C_ADDRESS, i2c1, 400, 18,19); // instantiate an object
+HD44780LCD myLCD(LCD_I2C_ADDRESS, i2c0, 400, 16,17); // instantiate an object
 
 // Section: Function Prototypes
 

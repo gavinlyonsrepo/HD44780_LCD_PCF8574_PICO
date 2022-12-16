@@ -20,8 +20,8 @@
 #define LCD_I2C_ADDRESS 0x27
 #define LCD_I2C_DELAY  50000 // uS delay , I2C timeout
 
-// DEBUG comment in for serial debug I2C errors
-#define LCD_SERIAL_DEBUG 1
+// ** DEBUG ** comment in for serial debug I2C errors to console
+// #define LCD_SERIAL_DEBUG 1
 
 // Command Byte Codes See  URL : dinceraydin.com/lcd/commands.htm for HD44780 CMDs
 

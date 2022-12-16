@@ -8,6 +8,7 @@ Table of contents
 
   * [Overview](#overview)
   * [Example files](#example-files)
+  * [Software](#software)
   * [Output](#output)
   
 Overview
@@ -45,6 +46,23 @@ The default is the HelloWorld one.
 2. examples/TestRun/main.cpp  Test sequence for 16x02 LCD.
 3. examples/TestRun20X04/main.cpp Test sequence for 20x04 LCD.
   
+Software
+-------------------
+There are four core files to library , The "print" super-class provides a way to print numerical and other data
+to screen. 
+
+1. HD44780_LCD_PCF8574.hpp
+2. HD44780_LCD_PCF8574.cpp
+3. HD44780_LCD_PCF8574_Print.hpp
+4. HD44780_LCD_PCF8574_Print.cpp
+
+The user can enable basic "printf" I2C debug messages by commenting in this line in 
+LCD_SERIAL_DEBUG  in the HD44780_LCD_PCF8574.hpp file.
+The I2C timeout is set to 50,000 uS and can also be adjusted in same file (LCD_I2C_DELAY).
+Both I2C ports can be used, IC20 or IC21 selected by user. The I2C bus speed can also be set. 
+For detailed graphical description of entry modes , cursor types, custom characters 
+and more see here [link](http://dinceraydin.com/lcd/commands.htm)
+
 Output
 ---------------------
 
