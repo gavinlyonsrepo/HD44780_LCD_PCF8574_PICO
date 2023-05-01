@@ -40,6 +40,13 @@ size_t Print::write(const uint8_t *buffer, size_t size)
   return n;
 }
 
+size_t Print::print(const std::string &s) {
+    return write(s.c_str(), s.length());
+}
+
+size_t Print::println(const std::string &s) {
+    return println(s);
+}
 
 size_t Print::print(const char str[])
 {

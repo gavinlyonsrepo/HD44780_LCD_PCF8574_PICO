@@ -24,7 +24,6 @@
 #include <string.h>
 #include <string>
 
-#define PGM_P const char*
 
 #define DEC 10
 #define HEX 16
