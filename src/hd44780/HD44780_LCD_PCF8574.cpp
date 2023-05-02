@@ -6,7 +6,7 @@
 #include "../include/hd44780/HD44780_LCD_PCF8574.hpp"
 
 /*!
-	@brief Constructor for class TM1638plus
+	@brief Constructor for class HD44780LCD
 	@param I2Caddress  The PCF8574 I2C address, default is 0x27.
 	@param i2c_type  I2C instance of port IC20 or I2C1
 	@param CLKspeed I2C Bus Clock speed in KHz. Set to 100
