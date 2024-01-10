@@ -5,8 +5,7 @@
 
 #  HD44780_LCD_PCF8574_PICO
 
-Table of contents
----------------------------
+## Table of contents
 
   * [Overview](#overview)
   * [Example files](#example-files)
@@ -14,8 +13,8 @@ Table of contents
   * [Output](#output)
   * [Notes](#notes)
   
-Overview
---------------------
+## Overview
+
 * Name : HD44780_LCD_PCF8574_PICO
 
 * Description :
@@ -37,8 +36,8 @@ Overview
 
 * Author: Gavin Lyons
 
-Example files
--------------------------
+## Example files
+
 
 The example files are in example folder.
 To build the one you want, edit the Cmaketxt file 
@@ -49,8 +48,8 @@ The default is the HelloWorld one.
 2. examples/TestRun/main.cpp  Test sequence for 16x02 LCD.
 3. examples/TestRun20X04/main.cpp Test sequence for 20x04 LCD.
   
-Software
--------------------
+## Software
+
 There are four core files to library , The "print" base class provides a way to print numerical and other data types  to screen. 
 
 1. HD44780_LCD_PCF8574.hpp
@@ -69,8 +68,7 @@ expect constructor, init and de-init I2C method's will be different.
 
 [Software API Url Link](https://gavinlyonsrepo.github.io/misc/software_docs/HD44780_LCD_PCF8574/index.html)
 
-Output
----------------------
+## Output
 
 Output  of custom character test in testrun example  file on 16x02 display.
 
@@ -80,8 +78,7 @@ Output  of custom character test in testrun example  file on 16x02 display.
 
 ![ pic2 ](https://github.com/gavinlyonsrepo/HD44780_LCD_PCF8574/blob/main/extras/image/2004.jpg)
 
-Notes
-----------------------------
+## Notes
 
 For detailed graphical description of entry modes , cursor types, custom characters 
 and more see here [link](http://dinceraydin.com/lcd/commands.htm)
