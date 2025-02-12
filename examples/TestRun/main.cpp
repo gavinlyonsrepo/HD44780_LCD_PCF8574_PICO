@@ -27,8 +27,13 @@
 #define DISPLAY_DELAY_2 2000
 #define DISPLAY_DELAY 5000
 
+
 //  Section: Globals 
-HD44780LCD myLCD(LCD_I2C_ADDRESS, i2c1, 100, 18,19); // instantiate an object
+#define CLOCK_PIN 19
+#define DATA_PIN  18
+#define CLOCK_SPEED 100
+#define I2C_ADDRESS 0x27
+HD44780LCD myLCD(I2C_ADDRESS, i2c1, CLOCK_SPEED, DATA_PIN, CLOCK_PIN); 
 
 // Section: Function Prototypes
 
@@ -46,29 +51,33 @@ void backLightTest(void);
 // Section: Main Loop
 int main()
 {
-  stdio_init_all(); // Initialize chosen serial port, default 38400 baud
-  
-  busy_wait_ms(1000);
-  printf("HD44780 : Start!\r\n");
+	stdio_init_all(); // Initialize chosen serial port, default 38400 baud
 
-  busy_wait_ms(50);
-  myLCD.PCF8574_LCDInit(myLCD.LCDCursorTypeOn, 2, 16);
-  myLCD.PCF8574_LCDClearScreen();
-  myLCD.PCF8574_LCDBackLightSet(true);
+	busy_wait_ms(1000);
+	printf("HD44780 : Start!\r\n");
 
-  while(true){
-	helloWorld(); 
-	cursorMoveTest(); 
-	scrollTest();
-	gotoTest();
-	clearLineTest();
-	cursorTest(); 
-	entryModeTest();
-	writeNumTest();
-	customChar();
-	backLightTest();
+	busy_wait_ms(50);
+	if(!myLCD.LCDInit(myLCD.LCDCursorTypeOn, 2, 16))
+	{
+		printf("Error : main : Failed to Init I2C!\r\n");
+		return -1;
+	}
+	myLCD.LCDClearScreen();
+	myLCD.LCDBackLightSet(true);
+
+	while(true){
+		helloWorld(); 
+		cursorMoveTest(); 
+		scrollTest();
+		gotoTest();
+		clearLineTest();
+		cursorTest(); 
+		entryModeTest();
+		writeNumTest();
+		customChar();
+		backLightTest();
   };
-
+  return 0;
 } // End of Main
 
 // Section :  Functions
@@ -76,44 +85,44 @@ int main()
 void helloWorld(void) {
 	char teststr1[] = "Hello";
 	char teststr2[] = "World";
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 0);
-	myLCD.PCF8574_LCDSendString(teststr1);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo , 0);
-	myLCD.PCF8574_LCDSendString(teststr2); // Display a string
-	myLCD.PCF8574_LCDSendChar('!'); // Display a single character
+	myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 0);
+	myLCD.LCDSendString(teststr1);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo , 0);
+	myLCD.LCDSendString(teststr2); // Display a string
+	myLCD.LCDSendChar('!'); // Display a single character
 	busy_wait_ms(DISPLAY_DELAY_1);
 }
 
 void cursorMoveTest(void) {
-	myLCD.PCF8574_LCDMoveCursor(myLCD.LCDMoveRight, 2);
+	myLCD.LCDMoveCursor(myLCD.LCDMoveRight, 2);
 	busy_wait_ms(DISPLAY_DELAY);
-	myLCD.PCF8574_LCDMoveCursor(myLCD.LCDMoveLeft, 2);
+	myLCD.LCDMoveCursor(myLCD.LCDMoveLeft, 2);
 }
 
 void scrollTest(void) {
 	for (uint8_t i = 0; i < 5; i++) {
-		myLCD.PCF8574_LCDScroll(myLCD.LCDMoveRight, 1);
+		myLCD.LCDScroll(myLCD.LCDMoveRight, 1);
 		busy_wait_ms(DISPLAY_DELAY_2);
 	}
-	myLCD.PCF8574_LCDScroll(myLCD.LCDMoveLeft, 5);
+	myLCD.LCDScroll(myLCD.LCDMoveLeft, 5);
 	busy_wait_ms(DISPLAY_DELAY_2);
 }
 
 void gotoTest(void) {
 	char teststr3[] = "Line 2";
-	myLCD.PCF8574_LCDClearScreen();
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 10);
-	myLCD.PCF8574_LCDSendChar('A');
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo , 2);
-	myLCD.PCF8574_LCDSendString(teststr3);
+	myLCD.LCDClearScreen();
+	myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 10);
+	myLCD.LCDSendChar('A');
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo , 2);
+	myLCD.LCDSendString(teststr3);
 	busy_wait_ms(DISPLAY_DELAY);
 }
 
 void clearLineTest(void)
 {
-	myLCD.PCF8574_LCDClearLine(myLCD.LCDLineNumberTwo );
+	myLCD.LCDClearLine(myLCD.LCDLineNumberTwo );
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearLine(myLCD.LCDLineNumberOne);
+	myLCD.LCDClearLine(myLCD.LCDLineNumberOne);
 	busy_wait_ms(DISPLAY_DELAY_2);
 }
 
@@ -123,29 +132,29 @@ void cursorTest(void) {
 	char teststr3[] = "Cursor no 2";
 	char teststr4[] = "Cursor no 3";
 	
-	myLCD.PCF8574_LCDResetScreen(myLCD.LCDCursorTypeOnBlink); //type 4 cursor
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo, 0);
-	myLCD.PCF8574_LCDSendString(teststr1);
+	myLCD.LCDResetScreen(myLCD.LCDCursorTypeOnBlink); //type 4 cursor
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo, 0);
+	myLCD.LCDSendString(teststr1);
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearLine(myLCD.LCDLineNumberTwo);
+	myLCD.LCDClearLine(myLCD.LCDLineNumberTwo);
 
-	myLCD.PCF8574_LCDResetScreen(myLCD.LCDCursorTypeOff); //type 1 cursor
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo, 0);
-	myLCD.PCF8574_LCDSendString(teststr2);
+	myLCD.LCDResetScreen(myLCD.LCDCursorTypeOff); //type 1 cursor
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo, 0);
+	myLCD.LCDSendString(teststr2);
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearLine(myLCD.LCDLineNumberTwo);
+	myLCD.LCDClearLine(myLCD.LCDLineNumberTwo);
 
-	myLCD.PCF8574_LCDResetScreen(myLCD.LCDCursorTypeBlink); //type 2 cursor
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo, 0);
-	myLCD.PCF8574_LCDSendString(teststr3);
+	myLCD.LCDResetScreen(myLCD.LCDCursorTypeBlink); //type 2 cursor
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo, 0);
+	myLCD.LCDSendString(teststr3);
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearLine(myLCD.LCDLineNumberTwo);
+	myLCD.LCDClearLine(myLCD.LCDLineNumberTwo);
 
-	myLCD.PCF8574_LCDResetScreen(myLCD.LCDCursorTypeOn); // Back to initial state , type 3
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo, 0);
-	myLCD.PCF8574_LCDSendString(teststr4);
+	myLCD.LCDResetScreen(myLCD.LCDCursorTypeOn); // Back to initial state , type 3
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo, 0);
+	myLCD.LCDSendString(teststr4);
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearLine(myLCD.LCDLineNumberTwo);
+	myLCD.LCDClearLine(myLCD.LCDLineNumberTwo);
 }
 
 void writeNumTest()
@@ -154,24 +163,24 @@ void writeNumTest()
 	int numNeg = -8582;
 	double myPI = 3.1456;
 	
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 0);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 0);
 	myLCD.print(numPos);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo , 0);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo , 0);
 	myLCD.print(numNeg);
-	myLCD.PCF8574_LCDMoveCursor(myLCD.LCDMoveRight, 2);
+	myLCD.LCDMoveCursor(myLCD.LCDMoveRight, 2);
 	myLCD.print(myPI,3);  
 	
 	busy_wait_ms(DISPLAY_DELAY);
-	myLCD.PCF8574_LCDClearScreen();
+	myLCD.LCDClearScreen();
 	
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 0); // 11
+	myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 0); // 11
 	myLCD.print(11);
-	myLCD.PCF8574_LCDMoveCursor(myLCD.LCDMoveRight, 2);  // 13
-	myLCD.print(11,OCT);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo , 0); // B
-	myLCD.print(11, HEX);
-	myLCD.PCF8574_LCDMoveCursor(myLCD.LCDMoveRight, 2); // 1011
-	myLCD.print(11,BIN);
+	myLCD.LCDMoveCursor(myLCD.LCDMoveRight, 2);  // 13
+	myLCD.print(11, myLCD.OCT);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo , 0); // B
+	myLCD.print(11, myLCD.HEX);
+	myLCD.LCDMoveCursor(myLCD.LCDMoveRight, 2); // 1011
+	myLCD.print(11, myLCD.BIN);
 	
 	busy_wait_ms(DISPLAY_DELAY);
 }
@@ -191,63 +200,63 @@ void customChar(void) {
 		{0x01, 0x01, 0x05, 0x09, 0x1F, 0x08, 0x04, 0x00}   // return arrow
 	};
 
-	myLCD.PCF8574_LCDClearScreen();
+	myLCD.LCDClearScreen();
 
 	// Load the CGRAM with the data , custom characters
 	// location argument must be 0 to 7  , load the data into LCD memory
  	 for (uint8_t index  = 0; index  < 8; index++) {
-	 	 myLCD.PCF8574_LCDCreateCustomChar(index , symbolData[index]);
+	 	 myLCD.LCDCreateCustomChar(index , symbolData[index]);
 	}
- 	 myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 0);
+ 	 myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 0);
 
 	// Print out custom characters from 
 	// CGRAM locations 0-7 , location argument must be 0 to 7 
 	for (index = 0; index < 8; index ++) {
-		myLCD.PCF8574_LCDPrintCustomChar(index);
-		myLCD.PCF8574_LCDMoveCursor(myLCD.LCDMoveRight, 1);
+		myLCD.LCDPrintCustomChar(index);
+		myLCD.LCDMoveCursor(myLCD.LCDMoveRight, 1);
 	}
 
 	busy_wait_ms(DISPLAY_DELAY);
-	myLCD.PCF8574_LCDClearScreen();
+	myLCD.LCDClearScreen();
 }
 
 void backLightTest(void)
 {
 	char teststr4[] = "Back Light";
 	// Needs another command/data before it changes Light
-	myLCD.PCF8574_LCDBackLightSet(false); 
+	myLCD.LCDBackLightSet(false); 
 	
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo , 1);
-	myLCD.PCF8574_LCDSendString(teststr4);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo , 1);
+	myLCD.LCDSendString(teststr4);
 	busy_wait_ms(DISPLAY_DELAY);
-	myLCD.PCF8574_LCDBackLightSet(true);
-	myLCD.PCF8574_LCDClearScreen();
+	myLCD.LCDBackLightSet(true);
+	myLCD.LCDClearScreen();
 }
 
 void entryModeTest(void) {
 
 	char teststr8[] = "1234";
 	
-	myLCD.PCF8574_LCDChangeEntryMode(myLCD.LCDEntryModeOne);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 8);
-	myLCD.PCF8574_LCDSendString(teststr8); // <-C4321
+	myLCD.LCDChangeEntryMode(myLCD.LCDEntryModeOne);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 8);
+	myLCD.LCDSendString(teststr8); // <-C4321
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearScreenCmd();
+	myLCD.LCDClearScreenCmd();
 
-	myLCD.PCF8574_LCDChangeEntryMode(myLCD.LCDEntryModeTwo);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo, 8);
-	myLCD.PCF8574_LCDSendString(teststr8); // C4321->
+	myLCD.LCDChangeEntryMode(myLCD.LCDEntryModeTwo);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo, 8);
+	myLCD.LCDSendString(teststr8); // C4321->
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearScreenCmd();
+	myLCD.LCDClearScreenCmd();
 
-	myLCD.PCF8574_LCDChangeEntryMode(myLCD.LCDEntryModeFour);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberTwo, 8);
-	myLCD.PCF8574_LCDSendString(teststr8); // <-1234C
+	myLCD.LCDChangeEntryMode(myLCD.LCDEntryModeFour);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberTwo, 8);
+	myLCD.LCDSendString(teststr8); // <-1234C
 	busy_wait_ms(DISPLAY_DELAY_2);
-	myLCD.PCF8574_LCDClearScreenCmd();
+	myLCD.LCDClearScreenCmd();
 
-	myLCD.PCF8574_LCDChangeEntryMode(myLCD.LCDEntryModeThree); // Set back to default entry mode
-	myLCD.PCF8574_LCDClearScreenCmd();
+	myLCD.LCDChangeEntryMode(myLCD.LCDEntryModeThree); // Set back to default entry mode
+	myLCD.LCDClearScreenCmd();
 	busy_wait_ms(DISPLAY_DELAY_1);
 }
 

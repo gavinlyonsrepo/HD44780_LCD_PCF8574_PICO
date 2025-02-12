@@ -1,7 +1,7 @@
 /*!
 	@file     main.cpp
 	@author   Gavin Lyons
-	@brief Basic usage example test file for LCD library, "Hello  World"
+	@brief Basic usage example test file for LCD library, "Hello World!"
 	@note https://github.com/gavinlyonsrepo/HD44780_LCD_PCF8574_PICO
 		-# NOTE (1) This is for 16 column 2 row LCD.
 		-# HD44780_LCD_PCF8574_PICO project name
@@ -14,7 +14,11 @@
 
 
 // *** Globals ***
-HD44780LCD myLCD(LCD_I2C_ADDRESS, i2c1, 100, 18,19); // instantiate an object
+#define CLOCK_PIN 19
+#define DATA_PIN  18
+#define CLOCK_SPEED 100
+#define I2C_ADDRESS 0x27
+HD44780LCD myLCD(I2C_ADDRESS, i2c1, CLOCK_SPEED, DATA_PIN, CLOCK_PIN); 
 
 // *** Main ***
 int main()
@@ -24,15 +28,24 @@ int main()
 	printf("HD44780 : Start!\r\n");
 
 	//setup
-	myLCD.PCF8574_LCDInit(myLCD.LCDCursorTypeOn, 2, 16);
-	myLCD.PCF8574_LCDClearScreen();
-	myLCD.PCF8574_LCDBackLightSet(true);
-	myLCD.PCF8574_LCDGOTO(myLCD.LCDLineNumberOne, 0);
-	//print hello world!
-	char testString[] = "Hello World";
-	myLCD.PCF8574_LCDSendString(testString);
-	myLCD.PCF8574_LCDSendChar('!');  // Display a single character
+	if(!myLCD.LCDInit(myLCD.LCDCursorTypeOn, 2, 16))
+	{
+		printf("Error : main : Failed to Init I2C!\r\n");
+		return -1;
+	}
+	myLCD.LCDClearScreen();
+	myLCD.LCDBackLightSet(true);
+	myLCD.LCDGOTO(myLCD.LCDLineNumberOne, 0);
 
-	while (true){busy_wait_ms(1000);}; // wait here forever
-	
+	//print Hello World!
+	char testString[] = "Hello World";
+	myLCD.LCDSendString(testString);
+	myLCD.LCDSendChar('!');  // Display a single character
+	busy_wait_ms(7000);
+
+	// end test
+	myLCD.LCDClearScreen();
+	myLCD.LCDDeInit();
+	printf("HD44780 : End!\r\n");
+	return 0;
 }

@@ -10,9 +10,6 @@
 #include "hd44780/HD44780_LCD_PCF8574_Print.hpp"
 #include "hardware/i2c.h"
 
-// Section: Constants
-const uint8_t LCD_I2C_ADDRESS = 0x27;  //I2C  address for I2C module PCF8574 backpack on LCD
-
 /*!
 	@brief Class for HD44780 LCD  
 */
@@ -56,32 +53,34 @@ class HD44780LCD : public Print{
 			LCDLineNumberFour = 4  /**<  row 4 */
 		}; 
 
+
 		HD44780LCD(uint8_t I2Caddress, i2c_inst_t* i2c_type, uint16_t CLKspeed, uint8_t  SDApin, uint8_t  SCLKpin);
 		~HD44780LCD(){};
 
-		void PCF8574_LCDInit (LCDCursorType_e, uint8_t NumRow, uint8_t NumCol);
-		void PCF8574_LCDDisplayON(bool );
-		void PCF8574_LCDResetScreen(LCDCursorType_e);
+		bool LCDInit (LCDCursorType_e, uint8_t NumRow, uint8_t NumCol);
+		void LCDDeInit(void);
+		void LCDDisplayON(bool );
+		void LCDResetScreen(LCDCursorType_e);
 
-		void PCF8574_LCDBackLightSet(bool);
-		bool PCF8574_LCDBackLightGet(void);
+		void LCDBackLightSet(bool);
+		bool LCDBackLightGet(void);
 
-	  void PCF8574_LCDSerialDebugSet(bool);
-		bool PCF8574_LCDSerialDebugGet(void);
+		void LCDSerialDebugSet(bool);
+		bool LCDSerialDebugGet(void);
 
-		void PCF8574_LCDSendString (char *str);
-		void PCF8574_LCDSendChar (char data);
-		void PCF8574_LCDCreateCustomChar(uint8_t location, uint8_t* charmap);
-		void PCF8574_LCDPrintCustomChar(uint8_t location);
+		void LCDSendString (char *str);
+		void LCDSendChar (char data);
+		void LCDCreateCustomChar(uint8_t location, uint8_t* charmap);
+		void LCDPrintCustomChar(uint8_t location);
 
-		void PCF8574_LCDMoveCursor(LCDDirectionType_e, uint8_t moveSize);
-		void PCF8574_LCDScroll(LCDDirectionType_e, uint8_t ScrollSize);
-		void PCF8574_LCDGOTO(LCDLineNumber_e  lineNo, uint8_t  col);
-		void PCF8574_LCDClearLine (LCDLineNumber_e lineNo);
-		void PCF8574_LCDClearScreen(void);
-		void PCF8574_LCDClearScreenCmd(void);
-		void PCF8574_LCDHome(void);
-		void PCF8574_LCDChangeEntryMode(LCDEntryMode_e mode);
+		void LCDMoveCursor(LCDDirectionType_e, uint8_t moveSize);
+		void LCDScroll(LCDDirectionType_e, uint8_t ScrollSize);
+		void LCDGOTO(LCDLineNumber_e  lineNo, uint8_t  col);
+		void LCDClearLine (LCDLineNumber_e lineNo);
+		void LCDClearScreen(void);
+		void LCDClearScreenCmd(void);
+		void LCDHome(void);
+		void LCDChangeEntryMode(LCDEntryMode_e mode);
 		virtual size_t write(uint8_t);
 
 	private:
@@ -103,7 +102,7 @@ class HD44780LCD : public Print{
 		LCDHomePosition  = 0x02, /**< Home (move cursor to top/left character position) */
 		LCDDisplayOn = 0x0C,  /**< Restore the display (with cursor hidden) */
 		LCDDisplayOff = 0x08, /**< Blank the display (without clearing) */
-		LCDClearScreen = 0x01 /**< clear screen */
+		LCDClearTheScreen = 0x01 /**< clear screen */
 	};
 
 		// I2C
@@ -123,10 +122,9 @@ class HD44780LCD : public Print{
 
 		enum  LCDBackLight_e _LCDBackLight= LCDBackLightOnMask;  /**< Enum to store backlight status*/
 		
-		void PCF8574_LCDSendCmd (unsigned char cmd);
-		void PCF8574_LCDSendData (unsigned char data);
-		bool PCF8574_LCD_I2C_ON(void);
-		void PCF8574_deinitI2C(void);
+		void LCDSendCmd (unsigned char cmd);
+		void LCDSendData (unsigned char data);
+		bool LCD_I2C_ON(void);
 
 	}; // end of HD44780LCD class
 
