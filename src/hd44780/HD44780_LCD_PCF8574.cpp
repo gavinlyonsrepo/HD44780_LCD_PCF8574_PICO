@@ -3,7 +3,7 @@
 // Section : Includes
 #include <stdio.h> // optional for printf debug messages
 #include "pico/stdlib.h"
-#include "../include/hd44780/HD44780_LCD_PCF8574.hpp"
+#include "../../include/hd44780/HD44780_LCD_PCF8574.hpp"
 
 /*!
 	@brief Constructor for class HD44780LCD

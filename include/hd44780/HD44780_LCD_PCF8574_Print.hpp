@@ -33,9 +33,9 @@ class Print
 		/*! Base number type */
 		enum BaseNum : uint8_t{
 				DEC = 10,   /**< Decimal*/
-				HEX = 16,    /**< Hexadecimal */
+				HEX = 16,   /**< Hexadecimal */
 				OCT = 8,    /**< Octal */
-				BIN = 2      /**<  Binary */
+				BIN = 2     /**< Binary */
 			};
 
 		int getWriteError() { return write_error; }

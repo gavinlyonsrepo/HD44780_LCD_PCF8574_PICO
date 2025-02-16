@@ -7,7 +7,7 @@
 #ifndef LCD_HD44780_H
 #define LCD_HD44780_H
 
-#include "hd44780/HD44780_LCD_PCF8574_Print.hpp"
+#include "HD44780_LCD_PCF8574_Print.hpp"
 #include "hardware/i2c.h"
 
 /*!
